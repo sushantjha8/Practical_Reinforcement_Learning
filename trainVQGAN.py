@@ -8,7 +8,7 @@ from torchvision import utils as vutils
 from discriminator import Discriminator
 from lpips import LPIPS
 from vqgan import VQGAN
-from utils import load_data
+from uitils import load_data
 from modelutils import weights_init
 
 
