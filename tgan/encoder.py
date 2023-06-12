@@ -1,5 +1,5 @@
 import torch.nn as nn
-from helper import (
+from tgan.helper import (
     ResidualBlock,
     NonLocalBlock,
     DownSampleBlock,
@@ -9,7 +9,7 @@ from helper import (
 )
 
 
-class Encoder(nn.module):
+class Encoder(nn.Module):
     def __init__(self, args):
         super(Encoder, self).__init__()
         channels = [128, 128, 128, 256, 256, 512]
@@ -36,5 +36,5 @@ class Encoder(nn.module):
         layers.append(nn.Conv2d(channels[-1], args.latent_dim, 3, 1, 1))
         self.model = nn.Sequential(*layers)
 
-    def forward(self):
-        return self.model
+    def forward(self, x):
+        return self.model(x)

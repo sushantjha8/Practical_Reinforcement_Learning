@@ -1,8 +1,8 @@
 import torch
 import torch.nn as nn
-from encoder import Encoder
-from decoder import Decoder
-from codebook import Codebook
+from tgan.encoder import Encoder
+from tgan.decoder import Decoder
+from tgan.codebook import Codebook
 
 
 class VQGAN(nn.Module):
@@ -11,9 +11,7 @@ class VQGAN(nn.Module):
         self.encoder = Encoder(args).to(device=args.device)
         self.decoder = Decoder(args).to(device=args.device)
         self.codebook = Encoder(args).to(device=args.device)
-        self.quantise = nn.Conv2d(args.latent_dim, args.latent_dim, 1).to(
-            device=args.device
-        )
+        self.quantise = nn.Conv2d(args.latent_dim, args.latent_dim, 1).to(device=args.device)
         self.post_quantise_conv = nn.Conv2d(args.latent_dim, args.latent_dim, 1).to(
             device=args.device
         )
@@ -24,9 +22,7 @@ class VQGAN(nn.Module):
         # Now Quantise Encoded image
         quant_conv_encoded_images = self.quant_conv(encoded_image)
         # build the code book for enced image and calculate loss.
-        codebook_mapping, codebook_indices, q_loss = self.codebook(
-            quant_conv_encoded_images
-        )
+        codebook_mapping, codebook_indices, q_loss = self.codebook(quant_conv_encoded_images)
         post_quant_conv_mapping = self.post_quant_conv(codebook_mapping)
         decoded_images = self.decoder(post_quant_conv_mapping)
         return decoded_images, codebook_indices, q_loss
@@ -34,9 +30,7 @@ class VQGAN(nn.Module):
     def encode(self, imgs):
         encoded_images = self.encoder(imgs)
         quant_conv_encoded_images = self.quant_conv(encoded_images)
-        codebook_mapping, codebook_indices, q_loss = self.codebook(
-            quant_conv_encoded_images
-        )
+        codebook_mapping, codebook_indices, q_loss = self.codebook(quant_conv_encoded_images)
         return codebook_mapping, codebook_indices, q_loss
 
     def decode(self, z):
@@ -50,9 +44,7 @@ class VQGAN(nn.Module):
         perceptual_loss_grads = torch.autograd.grad(
             perceptual_loss, last_layer_weight, retain_graph=True
         )[0]
-        gan_loss_grads = torch.autograd.grad(
-            gan_loss, last_layer_weight, retain_graph=True
-        )[0]
+        gan_loss_grads = torch.autograd.grad(gan_loss, last_layer_weight, retain_graph=True)[0]
 
         λ = torch.norm(perceptual_loss_grads) / (torch.norm(gan_loss_grads) + 1e-4)
         λ = torch.clamp(λ, 0, 1e4).detach()

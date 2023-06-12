@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from helper import ResidualBlock, NonLocalBlock, UpSampleBlock, GroupNorm, Swish
+from tgan.helper import ResidualBlock, NonLocalBlock, UpSampleBlock, GroupNorm, Swish
 
 
 class Decoder(nn.Module):

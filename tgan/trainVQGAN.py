@@ -7,7 +7,7 @@ import torch.nn.functional as F
 from torchvision import utils as vutils
 from discriminator import Discriminator
 from lpips import LPIPS
-from vqgan import VQGAN
+from tgan.vqgan import VQGAN
 from uitils import load_data
 from modelutils import weights_init
 
@@ -174,9 +174,7 @@ if __name__ == "__main__":
         default=2.25e-05,
         help="Learning rate (default: 0.0002)",
     )
-    parser.add_argument(
-        "--beta1", type=float, default=0.5, help="Adam beta param (default: 0.0)"
-    )
+    parser.add_argument("--beta1", type=float, default=0.5, help="Adam beta param (default: 0.0)")
     parser.add_argument(
         "--beta2", type=float, default=0.9, help="Adam beta param (default: 0.999)"
     )
