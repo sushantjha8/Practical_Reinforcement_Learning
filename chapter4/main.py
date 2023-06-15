@@ -95,7 +95,7 @@ optimizer = torch.optim.Adam(params=net.parameters(), lr=0.01)
 count = 1
 
 
-for e in range(0, 20):
+for e in range(0, 50):
     itrator = iterate_batches(env, net)
     for batch in enumerate(iterate_batches(env, net)):
         train_obs_v, train_act_v, reward_bound, reward_mean = filter_batch(batch)
