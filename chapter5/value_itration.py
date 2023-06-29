@@ -25,7 +25,6 @@ class Agent:
         # print(p.shape)
         reward = 0
         action_value = 0.0
-        t_c = self.tansition[(s, a)]
         for details in p:
             s_ = details[1]
             p = details[0]
