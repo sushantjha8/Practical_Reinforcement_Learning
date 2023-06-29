@@ -78,7 +78,7 @@ def discount_future_reward(episode_rewards=[], gamma=0.06):
         R = r + gamma * R
         rewards.insert(0, R)
 
-    # Scale rewards
+    # normalise rewards rewards
     rewards = torch.FloatTensor(rewards)
     rewards = (rewards - rewards.mean()) / (rewards.std() + np.finfo(np.float32).eps)
 
