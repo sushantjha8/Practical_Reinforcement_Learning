@@ -3,3 +3,4 @@
 .runs
 */data
 */tb-logger
+*.pth
