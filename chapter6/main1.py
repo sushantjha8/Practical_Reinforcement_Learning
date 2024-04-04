@@ -187,6 +187,7 @@ best_reward = float('-inf')  # Initialize with negative infinity or other approp
 best_model_path = "best_model.pth"  # Define the path where you want to save the best model
 checkpoint_interval = 5
 current_reward = 0.0
+prev_loss = float('-inf')
 # Training loop
 for step in range(1000):  # You may want to adjust the number of steps
     buffer.populate(1)
@@ -230,12 +231,16 @@ for step in range(1000):  # You may want to adjust the number of steps
 
     if step % 10 == 0:
         target_net.sync()
-    print(f"\n----------------------------Loss {loss.item()}------------\n")
-    if step % checkpoint_interval == 0:
-            # Check the performance and save the model if it's the best so far
-            if current_reward > best_reward:
-                best_reward = current_reward
-                torch.save(net.state_dict(), best_model_path)
+    
+    if prev_loss > loss.item():
+        prev_loss = loss.item()
+        print(f"\n----------------------------Loss {loss.item()}------------\n")
+        if step % checkpoint_interval == 0:
+                # Check the performance and save the model if it's the best so far
+                if current_reward > best_reward:
+                    best_reward = current_reward
+                    torch.save(net.state_dict(), best_model_path)
+                    print(f"\n----------------------------checkpoint saved ------------\n")
 # After training, you can use the trained model for inference.
 # For example, you can run the trained agent in the environment:
 # env.close()
@@ -248,7 +253,8 @@ while True:
     state_batch = torch.tensor([state], dtype=torch.float32)
     
     action = agent(state_batch)
-    state, _, done, _ = env.step(action.item())  # Extract the action value from the tensor
+    nstate, _, done, _ = env.step(action.item())  # Extract the action value from the tensor
+    exp_source.append(state=state, action=action, reward=reward, last_state=nstate, done=done)
     if done:
         break
 
