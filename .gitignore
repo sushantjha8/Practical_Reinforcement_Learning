@@ -5,3 +5,5 @@
 */tb-logger
 *.pth
 */runs
+chapter8/trial.ipynb
+chapter8/logs/*
