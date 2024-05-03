@@ -4,6 +4,9 @@
 */data
 */tb-logger
 *.pth
+*.pyc
+events.out.*
 */runs
+*/_pycache_
 chapter8/trial.ipynb
 chapter8/logs/*
